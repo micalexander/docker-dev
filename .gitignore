@@ -1,0 +1,10 @@
+# Blacklist files/folders in same directory as the .gitignore file
+/*
+
+# Ignore all files named .DS_Store or ending with .log
+**/.DS_Store
+**.log
+
+# Whitelist files/folders in same directory as the .gitignore file
+!.gitignore
+!docker-compose.yml
