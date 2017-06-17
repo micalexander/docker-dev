@@ -23,6 +23,7 @@ services:
       - node
       - mysql
       - php-fpm
+      - nginx
 
   nginx:
     image: micalexander/alpine-nginx-1.13.1:latest
@@ -33,6 +34,8 @@ services:
       - ${SITES_DIR}:/sites
     ports:
       - "80:8080"
+    expose: 
+      - "80"
     links:
       - php-fpm
 
