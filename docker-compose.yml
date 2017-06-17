@@ -18,6 +18,9 @@ services:
       - ruby:${RUBY_LOCAL_DIR}
       - node:/${NODE_LOCAL_DIR}
       - php-fpm:/${PHP_LOCAL_DIR}
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports: 
+      - "3000:3000"
     links:
       - ruby
       - node
