@@ -13,13 +13,13 @@ services:
     working_dir: /home/${DEV_USER}
     volumes:
       - ${DEV_DIR}:/home/${DEV_USER}
-      - ${ADDITIONAL_DIR}:/home/${DEV_USER}/${ADDITIONAL_DIR}
+        #     - ${ADDITIONAL_DIR}:/home/${DEV_USER}/${ADDITIONAL_DIR}
+      - ${DOCKER_SOCK_FILE}:${DOCKER_SOCK_FILE}
       - ${SITES_DIR}:/sites
       - ruby:${RUBY_LOCAL_DIR}
       - node:/${NODE_LOCAL_DIR}
       - php-fpm:/${PHP_LOCAL_DIR}
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports: 
+    ports:
       - "3000:3000"
     links:
       - ruby
@@ -37,7 +37,7 @@ services:
       - ${SITES_DIR}:/sites
     ports:
       - "80:8080"
-    expose: 
+    expose:
       - "80"
     links:
       - php-fpm
@@ -69,7 +69,7 @@ services:
     command: tail -f /dev/null
     volumes:
       - ruby:${RUBY_LOCAL_DIR}
- 
+
   node:
     image: micalexander/alpine-node-7.10:latest
     container_name: node
