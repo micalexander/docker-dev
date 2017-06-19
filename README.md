@@ -21,7 +21,7 @@ DEV_USER=yourusername
 # Directory you want to mount and where you can put your bashrc etc...
 DEV_DIR=/Users/yourusername/Dropbox/Development
  
-# An additional directoy you want to mount
+# An additional directoy you want to mount (must uncomment this line and the ADDITIONAL_DIR line in the docker-compose.yml
 # ADDITIONAL_DIR=/Users/yourusername/
  
 # Where you want to put you site for php/nginx
