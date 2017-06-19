@@ -1,5 +1,5 @@
 # docker-dev
-A Dev Environment with Alpine, Bash, PHP, Ruby, Node, MariaDB, and NGINX
+A Dev Environment with Alpine, Bash, PHP, Ruby, Node, MariaDB, NGINX, Docker, and Ansible
 
 ## Step one
 
