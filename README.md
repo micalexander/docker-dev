@@ -22,7 +22,7 @@ DEV_USER=yourusername
 DEV_DIR=/Users/yourusername/Dropbox/Development
  
 # An additional directoy you want to mount
-ADDITIONAL_DIR=/Users/yourusername/
+# ADDITIONAL_DIR=/Users/yourusername/
  
 # Where you want to put you site for php/nginx
 SITES_DIR=/Users/yourusername/Dropbox/Development/www 
