@@ -52,5 +52,5 @@ docker-compose up
 After following the sets above you can now use the bash container as a dev environment using your username from the steps above like so:
 
 ```
-docker exec -it -u yourusername bash /bin/bash
+docker exec -it -u yourusername bash /bin/bash -l
 ```
