@@ -34,7 +34,7 @@ MYSQL_USER=yourusername
 MYSQL_PASSWORD=someuserpassword
 
 # Points to the docker sock file
-DOCKER_SOCKET_FILE=/var/run/docker.sock
+DOCKER_SOCK_FILE=/var/run/docker.sock
 
 # Directories that will be mounted making it possible to use ruby, node, and php from inside the bash container
 RUBY_LOCAL_DIR=/usr/local/ruby
