@@ -10,6 +10,7 @@ services:
       RUBY_LOCAL_DIR: ${RUBY_LOCAL_DIR}/bin
       NODE_LOCAL_DIR: ${NODE_LOCAL_DIR}/bin
       PHP_LOCAL_DIR: ${PHP_LOCAL_DIR}/bin
+      PYTHON_LOCAL_DIR: ${PYTHON_LOCAL_DIR}/bin
     working_dir: /home/${DEV_USER}
     volumes:
       - ${DEV_DIR}:/home/${DEV_USER}
@@ -19,6 +20,7 @@ services:
       - ruby:${RUBY_LOCAL_DIR}
       - node:/${NODE_LOCAL_DIR}
       - php-fpm:/${PHP_LOCAL_DIR}
+      - python:/${PYTHON_LOCAL_DIR}
     ports:
       - "3000:3000"
     links:
@@ -27,6 +29,7 @@ services:
       - mysql
       - php-fpm
       - nginx
+      - python
 
   nginx:
     image: micalexander/alpine-nginx-1.13.1:latest
@@ -63,6 +66,13 @@ services:
       - ${SITES_DIR}:/sites
       - php-fpm:${PHP_LOCAL_DIR}
 
+  python:
+    image: micalexander/alpine-python-3.6.1:latest
+    container_name: python
+    command: tail -f /dev/null
+    volumes:
+      - python:${PYTHON_LOCAL_DIR}
+
   ruby:
     image: micalexander/alpine-ruby-2.4.1:latest
     container_name: ruby
@@ -82,3 +92,4 @@ volumes:
   node:
   mysql:
   php-fpm:
+  python:
