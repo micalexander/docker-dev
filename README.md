@@ -40,6 +40,7 @@ DOCKER_SOCK_FILE=/var/run/docker.sock
 RUBY_LOCAL_DIR=/usr/local/ruby
 NODE_LOCAL_DIR=/usr/local/node
 PHP_LOCAL_DIR=/usr/local/php
+PYTHON_LOCAL_DIR=/usr/local/python
 ```
  
 ## Step three
