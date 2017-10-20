@@ -6,11 +6,13 @@ services:
     hostname: alpine-bash
     container_name: bash
     environment:
+      TIMEZONE: America/Arizona
       DEV_USER: ${DEV_USER}
       RUBY_LOCAL_DIR: ${RUBY_LOCAL_DIR}/bin
       NODE_LOCAL_DIR: ${NODE_LOCAL_DIR}/bin
       PHP_LOCAL_DIR: ${PHP_LOCAL_DIR}/bin
-      PYTHON_LOCAL_DIR: ${PYTHON_LOCAL_DIR}/bin
+      PYTHON2_LOCAL_DIR: ${PYTHON2_LOCAL_DIR}/bin
+      PYTHON3_LOCAL_DIR: ${PYTHON3_LOCAL_DIR}/bin
     working_dir: /home/${DEV_USER}
     volumes:
       - ${DEV_DIR}:/home/${DEV_USER}
@@ -20,16 +22,25 @@ services:
       - ruby:${RUBY_LOCAL_DIR}
       - node:/${NODE_LOCAL_DIR}
       - php-fpm:/${PHP_LOCAL_DIR}
-      - python:/${PYTHON_LOCAL_DIR}
+      - python2:/${PYTHON2_LOCAL_DIR}
+      - python3:/${PYTHON3_LOCAL_DIR}
     ports:
       - "3000:3000"
     links:
       - ruby
       - node
       - mysql
+      - redis
       - php-fpm
       - nginx
-      - python
+      - python2
+      - python3
+
+  redis:
+    image: redis:4.0.2-alpine
+    ports:
+      - "6379:6379"
+    container_name: redis
 
   nginx:
     image: micalexander/alpine-nginx-1.13.1:latest
@@ -56,9 +67,10 @@ services:
     container_name: mysql
     volumes:
       - ${MYSQL_DATA_DIR}:/var/lib/mysql
+      - ${MYSQL_CNF}:/etc/mysql/conf.d
 
   php-fpm:
-    image: micalexander/alpine-php-fpm-7.0.19:latest
+    image: micalexander/alpine-php-fpm-7.0.24:latest
     ports:
       - "9000:9000"
     container_name: php-fpm
@@ -66,12 +78,19 @@ services:
       - ${SITES_DIR}:/sites
       - php-fpm:${PHP_LOCAL_DIR}
 
-  python:
-    image: micalexander/alpine-python-3.6.1:latest
-    container_name: python
+  python2:
+    image: micalexander/alpine-python-2.7.13:latest
+    container_name: python2
     command: tail -f /dev/null
     volumes:
-      - python:${PYTHON_LOCAL_DIR}
+      - python2:${PYTHON2_LOCAL_DIR}
+
+  python3:
+    image: micalexander/alpine-python-3.6.1:latest
+    container_name: python3
+    command: tail -f /dev/null
+    volumes:
+      - python3:${PYTHON3_LOCAL_DIR}
 
   ruby:
     image: micalexander/alpine-ruby-2.4.1:latest
@@ -92,4 +111,5 @@ volumes:
   node:
   mysql:
   php-fpm:
-  python:
+  python2:
+  python3:
