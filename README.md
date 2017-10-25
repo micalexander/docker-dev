@@ -17,18 +17,21 @@ Enter the repository directory and create a .env file with the follow key/value 
 ```
 # The username you want to use
 DEV_USER=yourusername
- 
+
 # Directory you want to mount and where you can put your bashrc etc...
 DEV_DIR=/Users/yourusername/Dropbox/Development
- 
+
+# Timezone
+TIMEZONE=America/Phoenix
+
 # An additional directoy you want to mount (must uncomment this line and the ADDITIONAL_DIR line in the docker-compose.yml
 # ADDITIONAL_DIR=/Users/yourusername/
- 
+
 # Where you want to put you site for php/nginx
-SITES_DIR=/Users/yourusername/Dropbox/Development/www 
- 
+SITES_DIR=/Users/yourusername/Dropbox/Development/www
+
 # Where you want to store your mysql data and mysql env variables
-MYSQL_DATA_DIR=/Users/yourusername/Dropbox/Development/mysql/mysql-data 
+MYSQL_DATA_DIR=/Users/yourusername/Dropbox/Development/mysql/mysql-data
 MYSQL_ROOT_PASSWORD=somerootpassword
 MYSQL_USER=yourusername
 MYSQL_PASSWORD=someuserpassword
@@ -40,19 +43,20 @@ DOCKER_SOCK_FILE=/var/run/docker.sock
 RUBY_LOCAL_DIR=/usr/local/ruby
 NODE_LOCAL_DIR=/usr/local/node
 PHP_LOCAL_DIR=/usr/local/php
-PYTHON_LOCAL_DIR=/usr/local/python
+PYTHON2_LOCAL_DIR=/usr/local/python2
+PYTHON3_LOCAL_DIR=/usr/local/python3
 ```
- 
+
 ## Step three
- 
+
 From within the directory run
- 
+
 ```
 docker-compose up
 ```
- 
+
 # Usage
- 
+
 After following the sets above you can now use the bash container as a dev environment using your username from the steps above like so:
 
 ```

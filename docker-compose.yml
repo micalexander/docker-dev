@@ -6,7 +6,7 @@ services:
     hostname: alpine-bash
     container_name: bash
     environment:
-      TIMEZONE: America/Arizona
+      TZ: ${TIMEZONE}
       DEV_USER: ${DEV_USER}
       RUBY_LOCAL_DIR: ${RUBY_LOCAL_DIR}/bin
       NODE_LOCAL_DIR: ${NODE_LOCAL_DIR}/bin
@@ -73,6 +73,8 @@ services:
     image: micalexander/alpine-php-fpm-7.0.24:latest
     ports:
       - "9000:9000"
+    environment:
+      TZ: ${TIMEZONE}
     container_name: php-fpm
     volumes:
       - ${SITES_DIR}:/sites
