@@ -10,17 +10,19 @@ services:
       DEV_USER: ${DEV_USER}
       RUBY_LOCAL_DIR: ${RUBY_LOCAL_DIR}/bin
       NODE_LOCAL_DIR: ${NODE_LOCAL_DIR}/bin
+      # GO_LOCAL_DIR: ${GO_LOCAL_DIR}/bin
       PHP_LOCAL_DIR: ${PHP_LOCAL_DIR}/bin
       PYTHON2_LOCAL_DIR: ${PYTHON2_LOCAL_DIR}/bin
       PYTHON3_LOCAL_DIR: ${PYTHON3_LOCAL_DIR}/bin
     working_dir: /home/${DEV_USER}
     volumes:
-      - ${DEV_DIR}:/home/${DEV_USER}
-        #     - ${ADDITIONAL_DIR}:/home/${DEV_USER}/${ADDITIONAL_DIR}
+      - ${HOST_HOME_DIR}/${DEV_DIR}:/home/${DEV_USER}
+      - ${HOST_HOME_DIR}/${ADDITIONAL_DIR}:/home/${DEV_USER}/${ADDITIONAL_DIR}
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${SITES_DIR}:/sites
       - ${DOCKER_SOCK_FILE}:${DOCKER_SOCK_FILE}
-      - ${SITES_DIR}:/sites
       - ruby:${RUBY_LOCAL_DIR}
       - node:/${NODE_LOCAL_DIR}
+      # - go:/${GO_LOCAL_DIR}
       - php-fpm:/${PHP_LOCAL_DIR}
       - python2:/${PYTHON2_LOCAL_DIR}
       - python3:/${PYTHON3_LOCAL_DIR}
@@ -29,6 +31,7 @@ services:
     links:
       - ruby
       - node
+      # - go
       - mysql
       - redis
       - php-fpm
@@ -46,9 +49,11 @@ services:
     image: micalexander/alpine-nginx-1.13.1:latest
     environment:
       FASTCGI_PASS: php-fpm
+    # deploy:
+    #   replicas: 3
     container_name: nginx
     volumes:
-      - ${SITES_DIR}:/sites
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${SITES_DIR}:/sites
     ports:
       - "80:8080"
     expose:
@@ -66,8 +71,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     container_name: mysql
     volumes:
-      - ${MYSQL_DATA_DIR}:/var/lib/mysql
-      - ${MYSQL_CNF}:/etc/mysql/conf.d
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${MYSQL_DATA_DIR}:/var/lib/mysql
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${MYSQL_CNF}:/etc/mysql/conf.d
 
   php-fpm:
     image: micalexander/alpine-php-fpm-7.0.24:latest
@@ -77,7 +82,7 @@ services:
       TZ: ${TIMEZONE}
     container_name: php-fpm
     volumes:
-      - ${SITES_DIR}:/sites
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${SITES_DIR}:/sites
       - php-fpm:${PHP_LOCAL_DIR}
 
   python2:
@@ -108,9 +113,19 @@ services:
     volumes:
       - node:${NODE_LOCAL_DIR}
 
+  # go:
+    # image: micalexander/alpine-node-7.10:latest
+    # build:
+      # context: ./go
+    # container_name: go
+    # command: tail -f /dev/null
+    # volumes:
+      # - go:${GO_LOCAL_DIR}
+
 volumes:
   ruby:
   node:
+  # go:
   mysql:
   php-fpm:
   python2:
