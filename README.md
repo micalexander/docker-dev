@@ -18,20 +18,23 @@ Enter the repository directory and create a .env file with the follow key/value 
 # The username you want to use
 DEV_USER=yourusername
 
+# Your home dir
+HOST_HOME_DIR=/Users/yourusername
+
 # Directory you want to mount and where you can put your bashrc etc...
-DEV_DIR=/Users/yourusername/Dropbox/Development
+DEV_DIR=Dropbox/Development
+
+# Where you want to put you site for php/nginx (dev dir relative)
+SITES_DIR=www
+
+# An additional directoy you want to mount (dev dir relative)
+ADDITIONAL_DIR=Downloads
 
 # Timezone
 TIMEZONE=America/Phoenix
 
-# An additional directoy you want to mount (must uncomment this line and the ADDITIONAL_DIR line in the docker-compose.yml
-# ADDITIONAL_DIR=/Users/yourusername/
-
-# Where you want to put you site for php/nginx
-SITES_DIR=/Users/yourusername/Dropbox/Development/www
-
-# Where you want to store your mysql data and mysql env variables
-MYSQL_DATA_DIR=/Users/yourusername/Dropbox/Development/mysql/mysql-data
+# Where you want to store your mysql data and mysql env variables (dev dir relative)
+MYSQL_DATA_DIR=mysql/mysql-data
 MYSQL_ROOT_PASSWORD=somerootpassword
 MYSQL_USER=yourusername
 MYSQL_PASSWORD=someuserpassword
