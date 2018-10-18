@@ -10,7 +10,6 @@ services:
       DEV_USER: ${DEV_USER}
       RUBY_LOCAL_DIR: ${RUBY_LOCAL_DIR}/bin
       NODE_LOCAL_DIR: ${NODE_LOCAL_DIR}/bin
-      # GO_LOCAL_DIR: ${GO_LOCAL_DIR}/bin
       PHP_LOCAL_DIR: ${PHP_LOCAL_DIR}/bin
       PYTHON2_LOCAL_DIR: ${PYTHON2_LOCAL_DIR}/bin
       PYTHON3_LOCAL_DIR: ${PYTHON3_LOCAL_DIR}/bin
@@ -19,15 +18,17 @@ services:
       - ${HOST_HOME_DIR}/${DEV_DIR}:/home/${DEV_USER}
       - ${HOST_HOME_DIR}/${ADDITIONAL_DIR}:/home/${DEV_USER}/${ADDITIONAL_DIR}
       - ${HOST_HOME_DIR}/${DEV_DIR}/${SITES_DIR}:/sites
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${APP_DIR}:/core
       - ${DOCKER_SOCK_FILE}:${DOCKER_SOCK_FILE}
       - ruby:${RUBY_LOCAL_DIR}
       - node:/${NODE_LOCAL_DIR}
-      # - go:/${GO_LOCAL_DIR}
       - php-fpm:/${PHP_LOCAL_DIR}
       - python2:/${PYTHON2_LOCAL_DIR}
       - python3:/${PYTHON3_LOCAL_DIR}
     ports:
+      - "60001:60001"
       - "3000:3000"
+      - "25:25"
     links:
       - ruby
       - node
@@ -39,25 +40,34 @@ services:
       - python2
       - python3
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+    container_name: rabbitmq
+
   redis:
     image: redis:4.0.2-alpine
     ports:
-      - "6379:6379"
+      - "6372:6379"
     container_name: redis
 
   nginx:
-    image: micalexander/alpine-nginx-1.13.1:latest
+    image: micalexander/alpine-nginx-1.13.7:latest
     environment:
       FASTCGI_PASS: php-fpm
-    # deploy:
-    #   replicas: 3
+    deploy:
+      replicas: 3
     container_name: nginx
+    restart: always
     volumes:
       - ${HOST_HOME_DIR}/${DEV_DIR}/${SITES_DIR}:/sites
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${APP_DIR}:/core
     ports:
-      - "80:8080"
+      - "8080:8080"
+      - "4443:443"
     expose:
-      - "80"
+      - "8080"
     links:
       - php-fpm
 
@@ -70,24 +80,28 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     container_name: mysql
+    restart: always
     volumes:
       - ${HOST_HOME_DIR}/${DEV_DIR}/${MYSQL_DATA_DIR}:/var/lib/mysql
       - ${HOST_HOME_DIR}/${DEV_DIR}/${MYSQL_CNF}:/etc/mysql/conf.d
 
   php-fpm:
-    image: micalexander/alpine-php-fpm-7.0.24:latest
+    image: micalexander/alpine-php-fpm-7.2.11
     ports:
       - "9000:9000"
     environment:
       TZ: ${TIMEZONE}
     container_name: php-fpm
+    restart: always
     volumes:
       - ${HOST_HOME_DIR}/${DEV_DIR}/${SITES_DIR}:/sites
+      - ${HOST_HOME_DIR}/${DEV_DIR}/${APP_DIR}:/core
       - php-fpm:${PHP_LOCAL_DIR}
 
   python2:
     image: micalexander/alpine-python-2.7.13:latest
     container_name: python2
+    restart: always
     command: tail -f /dev/null
     volumes:
       - python2:${PYTHON2_LOCAL_DIR}
@@ -95,6 +109,7 @@ services:
   python3:
     image: micalexander/alpine-python-3.6.1:latest
     container_name: python3
+    restart: always
     command: tail -f /dev/null
     volumes:
       - python3:${PYTHON3_LOCAL_DIR}
@@ -102,30 +117,24 @@ services:
   ruby:
     image: micalexander/alpine-ruby-2.4.1:latest
     container_name: ruby
+    restart: always
     command: tail -f /dev/null
     volumes:
       - ruby:${RUBY_LOCAL_DIR}
 
   node:
-    image: micalexander/alpine-node-7.10:latest
+    image: micalexander/alpine-node-8.12:latest
+    # build:
+      # context: ../../builds/node-8.12
     container_name: node
+    restart: always
     command: tail -f /dev/null
     volumes:
       - node:${NODE_LOCAL_DIR}
 
-  # go:
-    # image: micalexander/alpine-node-7.10:latest
-    # build:
-      # context: ./go
-    # container_name: go
-    # command: tail -f /dev/null
-    # volumes:
-      # - go:${GO_LOCAL_DIR}
-
 volumes:
   ruby:
   node:
-  # go:
   mysql:
   php-fpm:
   python2:
