@@ -2,9 +2,7 @@
 version: '3'
 services:
   bash:
-    # image: micalexander/alpine-bash:latest
-    build:
-      context: ./alpine-bash
+    image: micalexander/alpine-bash:latest
     hostname: alpine-bash
     container_name: bash
     environment:
