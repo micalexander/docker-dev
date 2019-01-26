@@ -94,7 +94,7 @@ services:
     volumes:
       - python2:/usr/local/python2
   python3:
-    image: micalexander/alpine-python-3.6.1:latest
+    image: micalexander/alpine-python-3.7.2:latest
     container_name: python3
     restart: always
     command: tail -f /dev/null
